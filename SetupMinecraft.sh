@@ -273,6 +273,8 @@ if [ -e "SetupMinecraft.sh" ]; then
     cp $tmppath/MinecraftBedrockServer-master/SetupMinecraft.sh SetupMinecraft.sh
     /usr/bin/env bash SetupMinecraft.sh
     exit 1
+  else
+    echo "You are running the current version of SetupMinecraft.sh."
   fi
 fi
 
