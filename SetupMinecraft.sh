@@ -324,10 +324,10 @@ if [ -d "$ServerName" ]; then
   # Update configuration file
   Update_Config
 
-  exit  # FIXME
-
   # Update Minecraft server scripts
   Update_Scripts
+
+  exit  # FIXME
 
   # Service configuration
   Update_Service
