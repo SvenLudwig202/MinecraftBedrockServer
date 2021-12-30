@@ -69,11 +69,11 @@ Update_Script() {
 }
 
 Update_Scripts() {
-  Update_Script $tmppath/MinecraftBedrockServer-master/start.sh start.sh
-  Update_Script $tmppath/MinecraftBedrockServer-master/stop.sh stop.sh
-  Update_Script $tmppath/MinecraftBedrockServer-master/restart.sh restart.sh
-  Update_Script $tmppath/MinecraftBedrockServer-master/fixpermissions.sh fixpermissions.sh
-  Update_Script $tmppath/MinecraftBedrockServer-master/update.sh update.sh
+  Update_Script "$tmppath/MinecraftBedrockServer-master/start.sh" "start.sh"
+  Update_Script "$tmppath/MinecraftBedrockServer-master/stop.sh" "stop.sh"
+  Update_Script "$tmppath/MinecraftBedrockServer-master/restart.sh" "restart.sh"
+  Update_Script "$tmppath/MinecraftBedrockServer-master/fixpermissions.sh" "fixpermissions.sh"
+  Update_Script "$tmppath/MinecraftBedrockServer-master/update.sh" "update.sh"
 }
 
 Update_Service() {
