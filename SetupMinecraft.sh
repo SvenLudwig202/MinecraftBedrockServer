@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Minecraft Server Installation Script - James A. Chambers - https://jamesachambers.com
 #
 # Instructions: https://jamesachambers.com/minecraft-bedrock-edition-ubuntu-dedicated-server-guide/
@@ -12,6 +12,10 @@
 echo "Minecraft Bedrock Server installation script by James Chambers"
 echo "Latest version always at https://github.com/TheRemote/MinecraftBedrockServer"
 echo "Don't forget to set up port forwarding on your router!  The default port is 19132"
+
+# Declarations
+tmpfile="/tmp/minecraftbedrockserver.zip"
+tmppath="/tmp/minecraftbedrockserver"
 
 # Randomizer for user agent
 RandNum=$(echo $((1 + $RANDOM % 5000)))
@@ -232,6 +236,23 @@ Update_Sudoers() {
   fi
 }
 
+Update_Config() {
+  printf 'userpath="%s"\ndirname="%s"\nservername="%s"\nuserxname="%s"\n' $PATH $DirName $ServerName $UserName > server.config
+}
+
+Fetch_Current() {
+  if [ -f $tmpfile ]; then
+    rm $tmpfile
+  fi
+  curl https://codeload.github.com/SvenLudwig202/MinecraftBedrockServer/zip/refs/heads/master -o $tmpfile
+  if [ -d $tmppath ]; then
+    rm -rf $tmppath
+  fi
+  mkdir $tmppath
+  unzip -d $tmppath -q $tmpfile
+  rm $tmpfile
+}
+
 ################################################################################################# End Functions
 
 # Check to make sure we aren't running as root
@@ -240,14 +261,20 @@ if [[ $(id -u) = 0 ]]; then
    exit 1
 fi
 
-if [ -e "SetupMinecraft.sh" ]; then
-  rm -f "SetupMinecraft.sh"
-  echo "Local copy of SetupMinecraft.sh running.  Exiting and running online version..."
-  curl https://raw.githubusercontent.com/TheRemote/MinecraftBedrockServer/master/SetupMinecraft.sh | bash
-  exit 1
-fi
-
 Check_Dependencies
+
+Fetch_Current
+
+if [ -e "SetupMinecraft.sh" ]; then
+  cmp -s $tmppath/MinecraftBedrockServer-master/SetupMinecraft.sh SetupMinecraft.sh
+  if [[ $? -ne 0 ]]; then
+    echo "Local copy of SetupMinecraft.sh is outdated.  Exiting and running current version..."
+    rm -f "SetupMinecraft.sh"
+    cp $tmppath/MinecraftBedrockServer-master/SetupMinecraft.sh SetupMinecraft.sh
+    /usr/bin/env bash SetupMinecraft.sh
+    exit 1
+  fi
+fi
 
 # Get directory path (default ~)
 until [ -d "$DirName" ]
@@ -307,6 +334,11 @@ if [ -d "$ServerName" ]; then
   cd $ServerName
   echo "Server directory is: $DirName/minecraftbe/$ServerName"
 
+  # Update configuration file
+  Update_Config
+
+  exit  # FIXME
+
   # Update Minecraft server scripts
   Update_Scripts
 
@@ -326,6 +358,8 @@ if [ -d "$ServerName" ]; then
 
   exit 0
 fi
+
+exit  # FIXME
 
 # Create server directory
 echo "Creating minecraft server directory ($DirName/minecraftbe/$ServerName)..."
