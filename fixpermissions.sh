@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Minecraft Server Permissions Fix Script - James A. Chambers - https://jamesachambers.com/minecraft-bedrock-edition-ubuntu-dedicated-server-guide/
 
 # Takes ownership of server files to fix common permission errors such as access denied
