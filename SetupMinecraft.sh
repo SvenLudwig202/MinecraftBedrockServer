@@ -45,76 +45,35 @@ function read_with_prompt {
   done
 }
 
+Update_Script() {
+  filenew="$1"
+  filelocal"$2"
+
+  if [ -e "$filelocal" ]; then
+    cmp -s $filenew $filelocal
+    if [[ $? -ne 0 ]]; then
+      echo "Local copy of $filelocal is outdated.  Updating file."
+      rm $filelocal
+      cp $filenew $filelocal
+      chmod +x $filelocal
+      return 1
+    else
+      echo "Local copy of $filelocal is already current."
+      return 0
+    fi
+  else
+    cp $filenew $filelocal
+    chmod +x $filelocal
+    return 0
+  fi
+}
+
 Update_Scripts() {
-  filenew=$tmppath/MinecraftBedrockServer-master/start.sh
-  filelocal=start.sh
-  if [ -e "SetupMinecraft.sh" ]; then
-    cmp -s $filenew $filelocal
-    if [[ $? -ne 0 ]]; then
-      echo "Local copy of $filelocal is outdated.  Updating file."
-      rm $filelocal
-      cp $filenew $filelocal
-      chmod +x $filelocal
-    else
-      echo "Local copy of $filelocal is already current."
-    fi
-  fi
-
-  filenew=$tmppath/MinecraftBedrockServer-master/stop.sh
-  filelocal=stop.sh
-  if [ -e "SetupMinecraft.sh" ]; then
-    cmp -s $filenew $filelocal
-    if [[ $? -ne 0 ]]; then
-      echo "Local copy of $filelocal is outdated.  Updating file."
-      rm $filelocal
-      cp $filenew $filelocal
-      chmod +x $filelocal
-    else
-      echo "Local copy of $filelocal is already current."
-    fi
-  fi
-
-  filenew=$tmppath/MinecraftBedrockServer-master/restart.sh
-  filelocal=restart.sh
-  if [ -e "SetupMinecraft.sh" ]; then
-    cmp -s $filenew $filelocal
-    if [[ $? -ne 0 ]]; then
-      echo "Local copy of $filelocal is outdated.  Updating file."
-      rm $filelocal
-      cp $filenew $filelocal
-      chmod +x $filelocal
-    else
-      echo "Local copy of $filelocal is already current."
-    fi
-  fi
-
-  filenew=$tmppath/MinecraftBedrockServer-master/fixpermissions.sh
-  filelocal=fixpermissions.sh
-  if [ -e "SetupMinecraft.sh" ]; then
-    cmp -s $filenew $filelocal
-    if [[ $? -ne 0 ]]; then
-      echo "Local copy of $filelocal is outdated.  Updating file."
-      rm $filelocal
-      cp $filenew $filelocal
-      chmod +x $filelocal
-    else
-      echo "Local copy of $filelocal is already current."
-    fi
-  fi
-
-  filenew=$tmppath/MinecraftBedrockServer-master/update.sh
-  filelocal=update.sh
-  if [ -e "SetupMinecraft.sh" ]; then
-    cmp -s $filenew $filelocal
-    if [[ $? -ne 0 ]]; then
-      echo "Local copy of $filelocal is outdated.  Updating file."
-      rm $filelocal
-      cp $filenew $filelocal
-      chmod +x $filelocal
-    else
-      echo "Local copy of $filelocal is already current."
-    fi
-  fi
+  Update_Script $tmppath/MinecraftBedrockServer-master/start.sh start.sh
+  Update_Script $tmppath/MinecraftBedrockServer-master/stop.sh stop.sh
+  Update_Script $tmppath/MinecraftBedrockServer-master/restart.sh restart.sh
+  Update_Script $tmppath/MinecraftBedrockServer-master/fixpermissions.sh fixpermissions.sh
+  Update_Script $tmppath/MinecraftBedrockServer-master/update.sh update.sh
 }
 
 Update_Service() {
