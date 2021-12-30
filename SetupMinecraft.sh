@@ -47,7 +47,7 @@ function read_with_prompt {
 
 Update_Script() {
   filenew="$1"
-  filelocal"$2"
+  filelocal="$2"
 
   if [ -e "$filelocal" ]; then
     cmp -s $filenew $filelocal
