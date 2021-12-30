@@ -46,49 +46,75 @@ function read_with_prompt {
 }
 
 Update_Scripts() {
-  # Remove existing scripts
-  rm start.sh stop.sh restart.sh fixpermissions.sh
+  filenew=$tmppath/MinecraftBedrockServer-master/start.sh
+  filelocal=start.sh
+  if [ -e "SetupMinecraft.sh" ]; then
+    cmp -s $filenew $filelocal
+    if [[ $? -ne 0 ]]; then
+      echo "Local copy of $filelocal is outdated.  Updating file."
+      rm $filelocal
+      cp $filenew $filelocal
+      chmod +x $filelocal
+    else
+      echo "Local copy of $filelocal is already current."
+    fi
+  fi
 
-  # Download start.sh from repository
-  echo "Grabbing start.sh from repository..."
-  curl -H "Accept-Encoding: identity" -L -o start.sh https://raw.githubusercontent.com/TheRemote/MinecraftBedrockServer/master/start.sh
-  chmod +x start.sh
-  sed -i "s:dirname:$DirName:g" start.sh
-  sed -i "s:servername:$ServerName:g" start.sh
-  sed -i "s:userxname:$UserName:g" start.sh
-  sed -i "s<pathvariable<$PATH<g" start.sh
+  filenew=$tmppath/MinecraftBedrockServer-master/stop.sh
+  filelocal=stop.sh
+  if [ -e "SetupMinecraft.sh" ]; then
+    cmp -s $filenew $filelocal
+    if [[ $? -ne 0 ]]; then
+      echo "Local copy of $filelocal is outdated.  Updating file."
+      rm $filelocal
+      cp $filenew $filelocal
+      chmod +x $filelocal
+    else
+      echo "Local copy of $filelocal is already current."
+    fi
+  fi
 
-  # Download stop.sh from repository
-  echo "Grabbing stop.sh from repository..."
-  curl -H "Accept-Encoding: identity" -L -o stop.sh https://raw.githubusercontent.com/TheRemote/MinecraftBedrockServer/master/stop.sh
-  chmod +x stop.sh
-  sed -i "s:dirname:$DirName:g" stop.sh
-  sed -i "s:servername:$ServerName:g" stop.sh
-  sed -i "s:userxname:$UserName:g" stop.sh
-  sed -i "s<pathvariable<$PATH<g" stop.sh
+  filenew=$tmppath/MinecraftBedrockServer-master/restart.sh
+  filelocal=restart.sh
+  if [ -e "SetupMinecraft.sh" ]; then
+    cmp -s $filenew $filelocal
+    if [[ $? -ne 0 ]]; then
+      echo "Local copy of $filelocal is outdated.  Updating file."
+      rm $filelocal
+      cp $filenew $filelocal
+      chmod +x $filelocal
+    else
+      echo "Local copy of $filelocal is already current."
+    fi
+  fi
 
-  # Download restart.sh from repository
-  echo "Grabbing restart.sh from repository..."
-  curl -H "Accept-Encoding: identity" -L -o restart.sh https://raw.githubusercontent.com/TheRemote/MinecraftBedrockServer/master/restart.sh
-  chmod +x restart.sh
-  sed -i "s:dirname:$DirName:g" restart.sh
-  sed -i "s:servername:$ServerName:g" restart.sh
-  sed -i "s:userxname:$UserName:g" restart.sh
-  sed -i "s<pathvariable<$PATH<g" restart.sh
+  filenew=$tmppath/MinecraftBedrockServer-master/fixpermissions.sh
+  filelocal=fixpermissions.sh
+  if [ -e "SetupMinecraft.sh" ]; then
+    cmp -s $filenew $filelocal
+    if [[ $? -ne 0 ]]; then
+      echo "Local copy of $filelocal is outdated.  Updating file."
+      rm $filelocal
+      cp $filenew $filelocal
+      chmod +x $filelocal
+    else
+      echo "Local copy of $filelocal is already current."
+    fi
+  fi
 
-  # Download fixpermissions.sh from repository
-  echo "Grabbing fixpermissions.sh from repository..."
-  curl -H "Accept-Encoding: identity" -L -o fixpermissions.sh https://raw.githubusercontent.com/TheRemote/MinecraftBedrockServer/master/fixpermissions.sh
-  chmod +x fixpermissions.sh
-  sed -i "s:dirname:$DirName:g" fixpermissions.sh
-  sed -i "s:servername:$ServerName:g" fixpermissions.sh
-  sed -i "s:userxname:$UserName:g" fixpermissions.sh
-  sed -i "s<pathvariable<$PATH<g" fixpermissions.sh
-
-  # Download update.sh from repository
-  echo "Grabbing update.sh from repository..."
-  curl -H "Accept-Encoding: identity" -L -o update.sh https://raw.githubusercontent.com/TheRemote/MinecraftBedrockServer/master/update.sh
-  chmod +x update.sh
+  filenew=$tmppath/MinecraftBedrockServer-master/update.sh
+  filelocal=update.sh
+  if [ -e "SetupMinecraft.sh" ]; then
+    cmp -s $filenew $filelocal
+    if [[ $? -ne 0 ]]; then
+      echo "Local copy of $filelocal is outdated.  Updating file."
+      rm $filelocal
+      cp $filenew $filelocal
+      chmod +x $filelocal
+    else
+      echo "Local copy of $filelocal is already current."
+    fi
+  fi
 }
 
 Update_Service() {
