@@ -31,9 +31,9 @@ function read_with_prompt {
     if [[ -z ${!variable_name} ]] && [[ -n "$default" ]] ; then
       declare -g $variable_name=$default
     fi
-    echo -n "$prompt : ${!variable_name} -- accept (y/n)?"
+    echo -n "$prompt: ${!variable_name} -- accept (Y/n)?"
     read answer < /dev/tty
-    if [[ "$answer" == "${answer#[Yy]}" ]]; then
+    if [ "$answer" == "${answer#[Yy]}" ] && [ "$answer" != "" ]; then
       unset $variable_name
     else
       echo "$prompt: ${!variable_name}"
