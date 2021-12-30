@@ -280,14 +280,16 @@ fi
 
 # Server name configuration
 echo "Enter a short one word label for a new or existing server (don't use minecraftbe)..."
-echo "It will be used in the folder name and service name..."
+echo "It will be used in the folder name and service name... (default bedrock)"
 
-read_with_prompt ServerName "Server Label"
+until [[ -n "$ServerName" ]]; do
+  read_with_prompt ServerName "Server Label" bedrock
 
-if [[ "$ServerName" == *"minecraftbe"* ]]; then
-  echo "Server label of minecraftbe is not allowed.  Please choose a different server label!"
-  exit 1
-fi
+  if [[ "$ServerName" == *"minecraftbe"* ]]; then
+    echo "Server label of minecraftbe is not allowed.  Please choose a different server label!"
+    unset ServerName
+  fi
+done
 
 echo "Enter server IPV4 port (default 19132): "
 read_with_prompt PortIPV4 "Server IPV4 Port" 19132
