@@ -9,6 +9,11 @@
 #
 # GitHub Repository: https://github.com/TheRemote/MinecraftBedrockServer
 
+# Function to write a horizontal bar
+Draw_Line() {
+  echo "================================================================================="
+}
+
 Draw_Line
 echo "Minecraft Bedrock Server installation script by James Chambers"
 echo "Latest version always at https://github.com/TheRemote/MinecraftBedrockServer"
@@ -21,11 +26,6 @@ tmppath="/tmp/minecraftbedrockserver"
 
 # Randomizer for user agent
 RandNum=$(echo $((1 + $RANDOM % 5000)))
-
-# Function to write a horizontal bar
-Draw_Line() {
-  echo "================================================================================="
-}
 
 # Function to read input from user with a prompt
 read_with_prompt() {
