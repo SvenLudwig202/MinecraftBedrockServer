@@ -293,7 +293,6 @@ do
     echo "Invalid directory.  Please use the default path of ~ or you're going to have errors.  This should be the same for ALL servers as it is your ROOT install directory."
   fi
 done
-Draw_Line
 
 # Check to see if Minecraft server main directory already exists
 cd $DirName
@@ -326,17 +325,14 @@ until [[ -n "$ServerName" ]]; do
     unset ServerName
   fi
 done
-Draw_Line
 
 Draw_Line
 echo "Enter server IPV4 port (default 19132): "
 read_with_prompt PortIPV4 "Server IPV4 Port" 19132
-Draw_Line
 
 Draw_Line
 echo "Enter server IPV6 port (default 19133): "
 read_with_prompt PortIPV6 "Server IPV6 Port" 19133
-Draw_Line
 
 if [ -d "$ServerName" ]; then
   echo "Directory minecraftbe/$ServerName already exists!  Updating scripts and configuring service ..."
