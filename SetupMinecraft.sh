@@ -255,6 +255,23 @@ Fetch_Current() {
   rm $tmpfile
 }
 
+Update_Self() {
+  if [ -e "SetupMinecraft.sh" ]; then
+    Draw_Line
+    cmp -s $tmppath/MinecraftBedrockServer-master/SetupMinecraft.sh SetupMinecraft.sh
+    if [[ $? -ne 0 ]]; then
+      echo "Local copy of SetupMinecraft.sh is outdated.  Exiting and running current version..."
+      rm -f "SetupMinecraft.sh"
+      cp $tmppath/MinecraftBedrockServer-master/SetupMinecraft.sh SetupMinecraft.sh
+      /usr/bin/env bash SetupMinecraft.sh
+      exit 1
+    else
+      echo "You are running the current version of SetupMinecraft.sh."
+    fi
+    Draw_Line
+  fi
+}
+
 ################################################################################################# End Functions
 
 # Check to make sure we aren't running as root
@@ -267,20 +284,7 @@ Check_Dependencies
 
 Fetch_Current
 
-if [ -e "SetupMinecraft.sh" ]; then
-  Draw_Line
-  cmp -s $tmppath/MinecraftBedrockServer-master/SetupMinecraft.sh SetupMinecraft.sh
-  if [[ $? -ne 0 ]]; then
-    echo "Local copy of SetupMinecraft.sh is outdated.  Exiting and running current version..."
-    rm -f "SetupMinecraft.sh"
-    cp $tmppath/MinecraftBedrockServer-master/SetupMinecraft.sh SetupMinecraft.sh
-    /usr/bin/env bash SetupMinecraft.sh
-    exit 1
-  else
-    echo "You are running the current version of SetupMinecraft.sh."
-  fi
-  Draw_Line
-fi
+Update_Self
 
 # Get directory path (default ~)
 Draw_Line
