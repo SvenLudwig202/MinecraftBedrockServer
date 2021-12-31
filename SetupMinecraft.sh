@@ -18,7 +18,6 @@ Draw_Line
 echo "Minecraft Bedrock Server installation script by James Chambers"
 echo "Latest version always at https://github.com/TheRemote/MinecraftBedrockServer"
 echo "Don't forget to set up port forwarding on your router!  The default port is 19132"
-Draw_Line
 
 # Declarations
 tmpfile="/tmp/minecraftbedrockserver.zip"
@@ -339,6 +338,7 @@ echo "Enter server IPV6 port (default 19133): "
 read_with_prompt PortIPV6 "Server IPV6 Port" 19133
 
 if [ -d "$ServerName" ]; then
+  Draw_Line
   echo "Directory minecraftbe/$ServerName already exists!  Updating scripts and configuring service ..."
 
   # Get username
