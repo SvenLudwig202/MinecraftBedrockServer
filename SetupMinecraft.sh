@@ -9,9 +9,11 @@
 #
 # GitHub Repository: https://github.com/TheRemote/MinecraftBedrockServer
 
+Draw_Line
 echo "Minecraft Bedrock Server installation script by James Chambers"
 echo "Latest version always at https://github.com/TheRemote/MinecraftBedrockServer"
 echo "Don't forget to set up port forwarding on your router!  The default port is 19132"
+Draw_Line
 
 # Declarations
 tmpfile="/tmp/minecraftbedrockserver.zip"
@@ -20,8 +22,13 @@ tmppath="/tmp/minecraftbedrockserver"
 # Randomizer for user agent
 RandNum=$(echo $((1 + $RANDOM % 5000)))
 
+# Function to write a horizontal bar
+Draw_Line() {
+  echo "================================================================================="
+}
+
 # Function to read input from user with a prompt
-function read_with_prompt {
+read_with_prompt() {
   variable_name="$1"
   prompt="$2"
   default="${3-}"
@@ -48,7 +55,7 @@ function read_with_prompt {
 Update_Script() {
   filenew="$1"
   filelocal="$2"
-
+  
   if [ -e "$filelocal" ]; then
     cmp -s $filenew $filelocal
     if [[ $? -ne 0 ]]; then
@@ -69,11 +76,13 @@ Update_Script() {
 }
 
 Update_Scripts() {
+  Draw_Line
   Update_Script "$tmppath/MinecraftBedrockServer-master/start.sh" "start.sh"
   Update_Script "$tmppath/MinecraftBedrockServer-master/stop.sh" "stop.sh"
   Update_Script "$tmppath/MinecraftBedrockServer-master/restart.sh" "restart.sh"
   Update_Script "$tmppath/MinecraftBedrockServer-master/fixpermissions.sh" "fixpermissions.sh"
   Update_Script "$tmppath/MinecraftBedrockServer-master/update.sh" "update.sh"
+  Draw_Line
 }
 
 Update_Service() {
@@ -116,6 +125,7 @@ Fix_Permissions() {
 Check_Dependencies() {
   # Install dependencies required to run Minecraft server in the background
   if command -v apt-get &> /dev/null; then
+    Draw_Line
     echo "Updating apt.."
     sudo apt-get update
 
@@ -146,9 +156,11 @@ Check_Dependencies() {
   else
     echo "Warning: apt was not found.  You may need to install curl, screen, unzip, libcurl4, openssl, libc6 and libcrypt1 with your package manager for the server to start properly!"
   fi
+  Draw_Line
 }
 
 Update_Server() {
+  Draw_Line
   # Retrieve latest version of Minecraft Bedrock dedicated server
   echo "Checking for the latest version of Minecraft Bedrock server..."
   curl -H "Accept-Encoding: identity" -H "Accept-Language: en" -L -A "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.33 (KHTML, like Gecko) Chrome/90.0.$RandNum.212 Safari/537.33" -o downloads/version.html https://minecraft.net/en-us/download/server/bedrock/
@@ -162,9 +174,11 @@ Update_Server() {
   UserName=$(whoami)
   curl -H "Accept-Encoding: identity" -H "Accept-Language: en" -L -A "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.33 (KHTML, like Gecko) Chrome/90.0.$RandNum.212 Safari/537.33" -o "downloads/$DownloadFile" "$DownloadURL"
   unzip -o "downloads/$DownloadFile"
+  Draw_Line
 }
 
 Check_Architecture () {
+  Draw_Line
   # Check CPU archtecture to see if we need to do anything special for the platform the server is running on
   echo "Getting system CPU architecture..."
   CPUArch=$(uname -m)
@@ -206,9 +220,11 @@ Check_Architecture () {
     echo "You are running a 32 bit operating system (i386 or i686) and the Bedrock Dedicated Server has only been released for 64 bit (x86_64).  If you have a 64 bit processor please install a 64 bit operating system to run the Bedrock dedicated server!"
     exit 1
   fi
+  Draw_Line
 }
 
 Update_Sudoers() {
+  Draw_Line
   if [ -d /etc/sudoers.d ]; then
     sudoline="$UserName ALL=(ALL) NOPASSWD: /bin/bash $DirName/minecraftbe/$ServerName/fixpermissions.sh -a, /bin/systemctl start $ServerName, /bin/bash $DirName/minecraftbe/$ServerName/start.sh"
     if [ -e /etc/sudoers.d/minecraftbe ]; then
@@ -219,6 +235,7 @@ Update_Sudoers() {
   else
     echo "/etc/sudoers.d was not found on your system.  Please add this line to sudoers using sudo visudo:  $sudoline"
   fi
+  Draw_Line
 }
 
 Update_Config() {
@@ -251,6 +268,7 @@ Check_Dependencies
 Fetch_Current
 
 if [ -e "SetupMinecraft.sh" ]; then
+  Draw_Line
   cmp -s $tmppath/MinecraftBedrockServer-master/SetupMinecraft.sh SetupMinecraft.sh
   if [[ $? -ne 0 ]]; then
     echo "Local copy of SetupMinecraft.sh is outdated.  Exiting and running current version..."
@@ -261,9 +279,11 @@ if [ -e "SetupMinecraft.sh" ]; then
   else
     echo "You are running the current version of SetupMinecraft.sh."
   fi
+  Draw_Line
 fi
 
 # Get directory path (default ~)
+Draw_Line
 until [ -d "$DirName" ]
 do
   echo "Enter root installation path for Minecraft BE (this is the same for ALL servers and should be ~, the subfolder will be chosen from the server name you provide). Almost nobody should change this unless you're installing to a different disk altogether. (default ~): "
@@ -273,6 +293,7 @@ do
     echo "Invalid directory.  Please use the default path of ~ or you're going to have errors.  This should be the same for ALL servers as it is your ROOT install directory."
   fi
 done
+Draw_Line
 
 # Check to see if Minecraft server main directory already exists
 cd $DirName
@@ -293,6 +314,7 @@ else
 fi
 
 # Server name configuration
+Draw_Line
 echo "Enter a short one word label for a new or existing server (don't use minecraftbe)..."
 echo "It will be used in the folder name and service name... (default bedrock)"
 
@@ -304,12 +326,17 @@ until [[ -n "$ServerName" ]]; do
     unset ServerName
   fi
 done
+Draw_Line
 
+Draw_Line
 echo "Enter server IPV4 port (default 19132): "
 read_with_prompt PortIPV4 "Server IPV4 Port" 19132
+Draw_Line
 
+Draw_Line
 echo "Enter server IPV6 port (default 19133): "
 read_with_prompt PortIPV6 "Server IPV6 Port" 19133
+Draw_Line
 
 if [ -d "$ServerName" ]; then
   echo "Directory minecraftbe/$ServerName already exists!  Updating scripts and configuring service ..."
