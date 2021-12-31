@@ -128,6 +128,15 @@ Check_Dependencies() {
     echo "Updating apt.."
     sudo apt-get update
 
+    if ! dpkg-query --show libcurl4 &> /dev/null; then
+      if apt-cache show libcurl4 &> /dev/null; then
+        sudo apt-get install libcurl4 -y
+      else
+        # Install libcurl3 for backwards compatibility in case libcurl4 isn't available
+        sudo apt-get install libcurl3 -y
+      fi
+    fi
+
     echo "Checking and installing dependencies.."
     if ! command -v curl &> /dev/null; then sudo apt-get install curl -y; fi
     if ! command -v unzip &> /dev/null; then sudo apt-get install unzip -y; fi
@@ -137,20 +146,9 @@ Check_Dependencies() {
     if ! command -v openssl &> /dev/null; then sudo apt-get install openssl -y; fi
     if ! command -v xargs &> /dev/null; then sudo apt-get install xargs -y; fi
 
-    CurlVer=$(apt-cache show libcurl4 | grep Version | awk 'NR==1{ print $2 }')
-    if [[ "$CurlVer" ]]; then
-      sudo apt-get install libcurl4 -y
-    else
-      # Install libcurl3 for backwards compatibility in case libcurl4 isn't available
-      CurlVer=$(apt-cache show libcurl3 | grep Version | awk 'NR==1{ print $2 }')
-      if [[ "$CurlVer" ]]; then sudo apt-get install libcurl3 -y; fi
-    fi
+    if ! dpkg-query --show libc6 &> /dev/null; then sudo apt-get install libc6 -y; fi
+    if ! dpkg-query --show libcrypt1 &> /dev/null; then sudo apt-get install libcrypt1 -y; fi
 
-    sudo apt-get install libc6 -y
-    sudo apt-get install libcrypt1 -y
-
-    # Double check curl since libcurl dependency issues can sometimes remove it
-    if ! command -v curl &> /dev/null; then sudo apt-get install curl -y; fi
     echo "Dependency installation completed"
   else
     echo "Warning: apt was not found.  You may need to install curl, screen, unzip, libcurl4, openssl, libc6 and libcrypt1 with your package manager for the server to start properly!"
